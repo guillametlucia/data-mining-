@@ -1,35 +1,14 @@
 name: data-mining-
 
 channels:
-  - anaconda
-  - conda-forge
   - defaults
-  - pip
-  - pytorch
-
 dependencies:
-  - python==3.10.12
   - pandas
   - numpy
-  - ipykernel
-  - datasets # huggingface datasets (access to tl;dr dataset)
-  - tqdm
-  - python-dotenv
-  - pip
-  - pytest
-  - pytorch
-  - chardet
-  - nomkl
-  - bitsandbytes
-  - re
   - matplotlib
   - nltk
+  - tqdm
+  - termcolor
+  - pip
   - pip:
-    - torch
-    - cchardet
-    - bitsandbytes
-    - evaluate
-    - pyarrow==12.0.0
-    - collections
-    - json
-    - termcolor
+    - pickle-mixin
