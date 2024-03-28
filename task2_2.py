@@ -1,0 +1,41 @@
+#  candidate-passages-top1000.tsv 
+    # unique instances of column pairs pid and passage
+# using the vocabulary from task 1, build inverted index
+
+# read vocab from task1
+# read candidate-passages-top1000.tsv (qid pid query passage)
+# build inverted index
+#Having said that, the inverted index implementation might need some extra care to avoid  getting out-of-memory and some parallelisation to make it fast enoug
+
+import pandas as pd
+from task1_2 import process_text 
+from collections import defaultdict
+from tqdm import tqdm
+from termcolor import colored
+import json
+
+candidate_passages = pd.read_csv('candidate-passages-top1000.tsv', sep='\t', header=None)
+with open('vocab.txt', 'r', encoding ='utf-8') as f:
+    vocab = f.read().splitlines()
+
+
+print(colored('Building index..', 'green', attrs=['reverse', 'blink']))
+# Create nested dictionary with terms as keys that map to another dictionary where documents are keys.
+inverted_index = defaultdict(lambda: defaultdict(int))
+
+# For each passage, record the amount of time terms appear. 
+done_pid = []
+for index, row in tqdm(candidate_passages.iterrows()):
+    if row[1] not in done_pid:
+        vocab = process_text(row[3])
+        pid = row[1]
+        done_pid.append(pid)
+        for term, count in vocab.items():
+            inverted_index[term][pid] = count
+print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
+
+# Save output
+print(colored('Saving file..', 'green', attrs=['reverse', 'blink']))
+with open('inverted_index.json', 'w') as f:
+    json.dump(inverted_index, f)
+print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
