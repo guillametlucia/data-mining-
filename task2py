@@ -8,7 +8,6 @@
 #Having said that, the inverted index implementation might need some extra care to avoid  getting out-of-memory and some parallelisation to make it fast enoug
 
 import pandas as pd
-from task1_2 import process_text 
 from collections import defaultdict
 from tqdm import tqdm
 from termcolor import colored
@@ -22,6 +21,15 @@ with open('vocab.txt', 'r', encoding ='utf-8') as f:
 print(colored('Building index..', 'green', attrs=['reverse', 'blink']))
 # Create nested dictionary with terms as keys that map to another dictionary where documents are keys.
 inverted_index = defaultdict(lambda: defaultdict(int))
+
+def process_text(text):
+    text = text.lower() # make all lower case
+    text = re.sub(r'[^\w\s]', ' ', text)
+    all_words = text.split()
+    sw_nltk = set(stopwords.words('english'))
+    all_words = [word for word in all_words if word not in sw_nltk and len(word) > 1]
+    vocab = Counter(all_words)
+    return  vocab
 
 # For each passage, record the amount of time terms appear. 
 done_pid = []
