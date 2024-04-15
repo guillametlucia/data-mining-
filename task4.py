@@ -29,7 +29,7 @@
 import json
 import pandas as pd
 import numpy as np
-from task1_2 import process_text, text_stats
+from task1 import process_text, text_stats
 
 with open('inverted_index.json', 'r') as f:
     inverted_index = json.load(f) # tf
