@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import numpy as np
-from task1_2 import process_text, text_stats
+from task1 import process_text, text_stats
 from termcolor import colored
 from time import perf_counter
 from tqdm import tqdm
