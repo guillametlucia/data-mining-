@@ -1,1 +1,2 @@
-# data-mining-
+# Information retrieval project
+## 
