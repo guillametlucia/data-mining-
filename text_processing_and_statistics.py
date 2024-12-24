@@ -1,6 +1,7 @@
 """
 Analyzes text from 'passage-collection.txt', calculates word frequencies, 
-applies Zipf's law, and generates plots of the results.
+applies Zipf's law, and generates plots of the results. 
+Generates a list of vocabulary for later use.
 """
 import pandas as pd
 import numpy as np
