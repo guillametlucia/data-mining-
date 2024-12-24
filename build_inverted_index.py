@@ -1,6 +1,11 @@
-#  candidate-passages-top1000.tsv 
+"""
+Builds an inverted index from a collection of passages.
+It reads a vocabulary list and candidate passages, processes each passage,
+and saves the inverted index as a JSON file.
+"""
+#  Collection of passages in tsv file. candidate-passages-top1000.tsv 
     # unique instances of column pairs pid and passage
-# using the vocabulary from task 1, build inverted index
+# Using the vocabulary from task 1, build inverted index
 
 # read vocab from task1
 # read candidate-passages-top1000.tsv (qid pid query passage)
