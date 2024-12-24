@@ -1,7 +1,12 @@
+"""
+Performs text retrieval using TF-IDF and BM25 scoring models.
+Reads data, processes queries and passages, calculates scores, and saves the results to CSV files.
+"""
+
 import json
 import pandas as pd
 import numpy as np
-from task1 import process_text, text_stats
+from text_processing_and_statistics import process_text, text_stats
 from termcolor import colored
 from time import perf_counter
 from tqdm import tqdm
@@ -16,11 +21,16 @@ candidate_passages = pd.read_csv('candidate-passages-top1000.tsv', sep='\t', hea
 test_queries = pd.read_csv('test-queries.tsv', sep='\t', header=None)
 
 
+"""
+TF-IDF
+Vector representation of documents and queries.
+"""
 
-# TF-IDF. Vector representation of documents and queries.
+# Prepare lists of unique passage IDs and query IDs
 all_pid = candidate_passages[1].unique().tolist()
 all_qid = test_queries[0].tolist()
 
+# Calculate nt and idf for each term
 print(colored('Calculating nt and idf..', 'green', attrs=['reverse', 'blink']))
 N = len(all_pid)
 logN = np.log(N)
@@ -33,6 +43,7 @@ for term, docs in tqdm(inverted_index.items()):
     nt_idf_dict[term] = [nt, idf]
 print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
 
+# Function to create passage vector
 def p_vectorrep(pid, inverted_index, nt_idf_dict, query_vocab):
     pvector = np.zeros(len(query_vocab))  # Initialize pvector with the size of query_vocab
     for i, term in enumerate(query_vocab):
@@ -41,8 +52,8 @@ def p_vectorrep(pid, inverted_index, nt_idf_dict, query_vocab):
             tf = inverted_index[term].get(pid, 0)  # tf for the term in the document, default to 0 if not present
             pvector[i] = tf * idf  # Calculate tf-idf and assign to the correct position in the vector
     return pvector
-
-
+    
+# Function to create query vector
 def q_vectorrep(query_vocab, nt_idf_dict):
     q_vector = np.zeros(len(query_vocab))
     for i, term in enumerate(query_vocab):
@@ -53,11 +64,16 @@ def q_vectorrep(query_vocab, nt_idf_dict):
             q_vector[i] = tf * idf
     return q_vector
 
+"""
+BM25
+"""
 
+# BM25 parameters
 k1 = 1.2
 k2 = 100
 b = 0.75
 
+# Calculate document lengths for BM25
 print(colored('Calculating document lengths..', 'green', attrs=['reverse', 'blink']))
 doc_lengths_dict = {}
 for index, row in tqdm(candidate_passages.iterrows()):
@@ -69,11 +85,12 @@ avg_dl = np.mean(list(doc_lengths_dict.values()))
 print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
 
 
-
-
+# Group candidate passages by query ID
 candidate_pids_per_qid = candidate_passages.groupby(0)[1].apply(lambda x: [str(pid) for pid in x]).to_dict()
 results_cosine = {qid: {} for qid in all_qid} # Initialize a dictionary to store the results
 results_bm25 = {qid: {} for qid in all_qid} # Initialize a dictionary to store the results
+
+# Calculate scores for each query
 print(colored('Calculating scores..', 'green', attrs=['reverse', 'blink']))
 for qid in tqdm(all_qid):
     query = test_queries[test_queries[0] == qid][1].values[0]
@@ -98,12 +115,12 @@ for qid in tqdm(all_qid):
 print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
 
 
-
-
 ############################################################################################################
 ############################### Format output ##############################################################
 ############################################################################################################
 
+
+#########################################TFIDF########################################################
 # Initialise empty results dataframe
 final = pd.DataFrame(columns=["qid", "pid", "score"])
 row_count = 0
