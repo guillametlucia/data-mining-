@@ -35,3 +35,10 @@ Computes relevance scores for the passages using BM25, ranks the validation data
 Computes Word2Vec embeddings for the passages and queries, and uses a logistic regression model to score the relevance of each passage.
 
 Evaluates the retrieval quality using precision and NDCG metrics.
+
+## lambdamart.py
+Trains LambdaMART models with different objectives (NDCG and MAP) and evaluates their performance on validation data.
+Uses the best model to rerank candidate passages and save the top 100 ranked passages for each query.
+
+## bert.py
+
