@@ -1,5 +1,5 @@
 # Information retrieval project
-This project focuses on using different statistical models to retrieve the most relevant passages for user queries. 
+This project focuses on using different statistical models to retrieve the most relevant passages (documents) for user queries. 
 
 ## External files used
 passage-collection.txt: contains the collection of passages used for text analysis.
