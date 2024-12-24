@@ -27,5 +27,11 @@ Implements query likelihood language models with Laplace smoothing, Lidstone cor
 Ranks passages based on queries, calculates probabilities, and saves the results to CSV files.
 
 ## clean_text_and_evaluate_BM25.py
-Performs data preprocessing, text cleaning, and tokenization. The script then computes relevance scores for the passages using BM25, ranks the validation data, and calculates precision and NDCG metrics to evaluate the retrieval quality. The results and cleaned data are saved for further analysis.
+Performs data preprocessing, text cleaning, and tokenization; saved for further use.
 
+Computes relevance scores for the passages using BM25, ranks the validation data, and calculates precision and NDCG metrics to evaluate the retrieval quality. 
+
+## word2vec_logisticregression.py
+Computes Word2Vec embeddings for the passages and queries, and uses a logistic regression model to score the relevance of each passage.
+
+Evaluates the retrieval quality using precision and NDCG metrics.
