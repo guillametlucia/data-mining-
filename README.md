@@ -41,4 +41,4 @@ Trains LambdaMART models with different objectives (NDCG and MAP) and evaluates 
 Uses the best model to rerank candidate passages and save the top 100 ranked passages for each query.
 
 ## bert.py
-
+Trains a BERT model to rerank candidate passages for each query.
