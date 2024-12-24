@@ -1,3 +1,7 @@
+"""
+Analyzes text from 'passage-collection.txt', calculates word frequencies, 
+applies Zipf's law, and generates plots of the results.
+"""
 import pandas as pd
 import numpy as np
 import re
@@ -14,12 +18,16 @@ with open('passage-collection.txt', 'r', encoding ='utf-8') as f:
 
 
 def text_stats(text, remove_stopwords=False):
-    # INPUT: string of text 
-    # RETURNS: 
-        # vocab: dictionary containing all the vocabulary terms and how many times they occur.
-        # vocab_size: number of unique words in the text
-        # total: total number of words in the text
-        # norm_freq: normalized frequency of each word in the text. np array
+    """
+    Analyzes text statistics.
+    
+    Parameters:
+    text (str): The text to analyze.
+    remove_stopwords (bool): Whether to remove stopwords from the text.
+    
+    Returns:
+    tuple: Contains vocabulary Counter, vocabulary size, total words, and normalized frequencies.
+    """
     text = text.lower() # make all lower case
     text = re.sub(r'[^\w\s]', ' ', text)
     all_words = text.split()
@@ -32,7 +40,17 @@ def text_stats(text, remove_stopwords=False):
     total = counts.sum()
     norm_freq = counts / total  
     return(vocab, vocab_size, total, norm_freq)
+    
 def process_text(text):
+    """
+    Processes text by converting to lowercase, removing punctuation, and filtering stopwords.
+    
+    Parameters:
+    text (str): The text to process.
+    
+    Returns:
+    Counter: Vocabulary Counter.
+    """
     text = text.lower() # make all lower case
     text = re.sub(r'[^\w\s]', ' ', text)
     all_words = text.split()
@@ -41,30 +59,32 @@ def process_text(text):
     vocab = Counter(all_words)
     return  vocab
 
-
+# Analyze text with and without stopwords removal
 vocab, vocab_size, total, norm_freq = text_stats(passages, remove_stopwords=True)
 vocab_i, vocab_size_i, total_i, norm_freq_i = text_stats(passages, remove_stopwords=False)
 
+# Write vocabulary to file
 with open('vocab.txt', 'w', encoding='utf-8') as f:
     for key, value in vocab.items():
         f.write(f"{key}: {value}\n")
 
 
-#Rank based on highest frequency        
+# Rank based on highest frequency        
 sorted_indices = np.argsort(norm_freq)[::-1]  # Get indices to sort the array in descending order
 sorted_frequencies = norm_freq[sorted_indices]
 ranks = np.arange(1, vocab_size + 1)
-# Zipf's law
-s= 1 # distribution parameter zipf law 
+
+# Apply Zipf's law
+s= 1 # distribution parameter Zipf law 
 denominator = np.sum(ranks.astype(float) ** -s)
 theoretical_freq = ranks.astype(float) **-s/denominator
 
-#Rank based on highest frequency        
+# Rank based on highest frequency        
 sorted_indices_i = np.argsort(norm_freq_i)[::-1]  # Get indices to sort the array in descending order
 sorted_frequencies_i = norm_freq_i[sorted_indices_i]
 ranks_i = np.arange(1, vocab_size_i + 1)
+
 # Zipf's law
-s= 1 # distribution parameter zipf law 
 denominator_i = np.sum(ranks_i.astype(float) ** -s)
 theoretical_freq_i = ranks_i.astype(float) **-s/denominator_i
 
