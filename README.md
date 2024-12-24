@@ -26,4 +26,6 @@ Implements query likelihood language models with Laplace smoothing, Lidstone cor
 
 Ranks passages based on queries, calculates probabilities, and saves the results to CSV files.
 
+## clean_text_and_evaluate_BM25.py
+Performs data preprocessing, text cleaning, and tokenization. The script then computes relevance scores for the passages using BM25, ranks the validation data, and calculates precision and NDCG metrics to evaluate the retrieval quality. The results and cleaned data are saved for further analysis.
 
