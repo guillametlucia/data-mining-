@@ -1,30 +1,27 @@
 """
 Builds an inverted index from a collection of passages.
-It reads a vocabulary list and candidate passages, processes each passage,
+It reads a previously generated vocabulary list and candidate passages, processes each passage,
 and saves the inverted index as a JSON file.
 """
-#  Collection of passages in tsv file. candidate-passages-top1000.tsv 
-    # unique instances of column pairs pid and passage
-# Using the vocabulary from task 1, build inverted index
-
-# read vocab from task1
-# read candidate-passages-top1000.tsv (qid pid query passage)
-# build inverted index
-#Having said that, the inverted index implementation might need some extra care to avoid  getting out-of-memory and some parallelisation to make it fast enoug
+# candidate-passages-top1000.tsv 
+    # Collection of passages in tsv file: qid - pid - query - passage
+    # Contains unique instances of column pairs pid (passage ID) and passage
 
 import pandas as pd
 from collections import defaultdict
 from tqdm import tqdm
 from termcolor import colored
-from task1 import process_text
+from text_processing_and_statistics import process_text
 import json
 
+# Read candidate passages from TSV file and vocabulary
 candidate_passages = pd.read_csv('candidate-passages-top1000.tsv', sep='\t', header=None)
 with open('vocab.txt', 'r', encoding ='utf-8') as f:
     vocab = f.read().splitlines()
 
 
 print(colored('Building index..', 'green', attrs=['reverse', 'blink']))
+
 # Create nested dictionary with terms as keys that map to another dictionary where documents are keys.
 inverted_index = defaultdict(lambda: defaultdict(int))
 
@@ -39,7 +36,7 @@ for index, row in tqdm(candidate_passages.iterrows()):
             inverted_index[term][pid] = count
 print(colored('Success\n', 'green', attrs=['reverse', 'blink']))
 
-# Save output
+# Save the inverted index to a JSON file
 print(colored('Saving file..', 'green', attrs=['reverse', 'blink']))
 with open('inverted_index.json', 'w') as f:
     json.dump(inverted_index, f)
